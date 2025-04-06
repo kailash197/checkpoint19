@@ -88,7 +88,7 @@ class DHMatrixGenerator:
             if name in self.matrices and self.matrices[name] is not None:
                 self.simplified_matrices[name] = trigsimp(self.matrices[name])
 
-    def save_matrices(self, matrix_names: List[str], simplified=False, prefix: str = "", postfix: str = ""):
+    def save_matrices(self, matrix_names: List[str], simplified: bool = False, prefix: str = "", postfix: str = ""):
         """Save specified matrices to files with proper LaTeX escaping"""
         from sympy import preview
         
@@ -102,9 +102,16 @@ class DHMatrixGenerator:
                     matrix = self.matrices.get(name)                
                     preview(matrix, viewer='file', filename=f"{prefix}{name}{postfix}.png", dvioptions=['-D','300'])
 
+    def get_matrix(self, matrix_name: str, simplified: bool =False):
+        if simplified:
+            if matrix_name in self.simplified_matrices and self.simplified_matrices[matrix_name] is not None:
+                return self.simplified_matrices.get(matrix_name)
+        else:
+            if matrix_name in self.matrices and self.matrices[matrix_name] is not None:
+                return self.matrices.get(matrix_name)
 
 def main():
-    # User provides these inputs:
+    # From checkpoint
     chain_length = 3
     matrices_to_simplify = ["A01", "A12", "A23", "A03"]
     save_matrices = ["A01", "A12", "A23", "A03"]
