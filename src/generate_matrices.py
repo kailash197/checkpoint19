@@ -88,7 +88,7 @@ class DHMatrixGenerator:
             if name in self.matrices and self.matrices[name] is not None:
                 self.simplified_matrices[name] = trigsimp(self.matrices[name])
 
-    def save_matrices(self, matrix_names: List[str], simplified=False, prefix: str = ""):
+    def save_matrices(self, matrix_names: List[str], simplified=False, prefix: str = "", postfix: str = ""):
         """Save specified matrices to files with proper LaTeX escaping"""
         from sympy import preview
         
@@ -96,11 +96,11 @@ class DHMatrixGenerator:
             if simplified:
                 if name in self.simplified_matrices and self.simplified_matrices[name] is not None:
                     matrix = self.simplified_matrices.get(name)
-                    preview(matrix, viewer='file', filename=f"{prefix}{name}_simplify.png", dvioptions=['-D','300'])
+                    preview(matrix, viewer='file', filename=f"{prefix}{name}{postfix}.png", dvioptions=['-D','300'])
             else:
                 if name in self.matrices and self.matrices[name] is not None:
                     matrix = self.matrices.get(name)                
-                    preview(matrix, viewer='file', filename=f"{prefix}{name}.png", dvioptions=['-D','300'])
+                    preview(matrix, viewer='file', filename=f"{prefix}{name}{postfix}.png", dvioptions=['-D','300'])
 
 
 def main():
@@ -125,7 +125,7 @@ def main():
     dh.build_compound_matrices(chain_length)
     dh.simplify_matrices(matrices_to_simplify)
     dh.save_matrices(save_matrices)
-    dh.save_matrices(save_simplified_matrices, simplified=True)
+    dh.save_matrices(save_simplified_matrices, simplified=True, postfix="_simplify")
 
 if __name__ == "__main__":
     main()
